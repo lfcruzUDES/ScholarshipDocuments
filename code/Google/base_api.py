@@ -8,7 +8,10 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
 
-class FatherAPI(object):
+class ServiceAPI(object):
+
+    api_service = None
+    api_version = None
 
     def __init__(self, secrets_path, scopes):
         self._secrets_path = secrets_path
@@ -38,5 +41,5 @@ class FatherAPI(object):
             with open(path.join(self._secrets_path, 'token.pickle'), 'wb') as token:
                 pickle.dump(creds, token)
 
-        service = build('sheets', 'v4', credentials=creds)
+        service = build(self.api_service, self.api_version, credentials=creds)
         return service

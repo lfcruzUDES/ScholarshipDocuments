@@ -26,7 +26,7 @@ class GSS_Test(unittest.TestCase):
     def test_get_values(self):
         """ Prueba la extracción de datos. """
         datas = self.gs.get_datas()
-
+        self.assertEqual(type(datas), list)
 
 
 if __name__ == "__main__":
