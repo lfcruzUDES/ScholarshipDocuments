@@ -9,6 +9,20 @@ from googleapiclient.discovery import build
 
 
 class ServiceAPI(object):
+    """ De esta clase heredan las demás clases referentes
+    a servicios de Google.
+
+    Atributos:
+
+        - api_service {string}: es el servicio al que se va a conectar: drive, spreadsheets.
+
+        - api_version {string}: es la versión de la api que se usará.
+
+    Funciones:
+
+        - conn : regresa la conexión al servicio, pero sólo al servicio de Google,
+        para después conectarse a las APIs.
+     """
 
     api_service = None
     api_version = None
@@ -18,15 +32,18 @@ class ServiceAPI(object):
         self._SCOPES = scopes
 
     def conn(self):
-        """Se conecta al libro de cálculo de Google.
+        """Se conecta al servicio de apis de Google
+        y regresa un servicio.
         """
         creds = None
+
         # The file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
         if path.exists(path.join(self._secrets_path, 'token.pickle')):
             with open(path.join(self._secrets_path, 'token.pickle'), 'rb') as token:
                 creds = pickle.load(token)
+
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
@@ -37,6 +54,7 @@ class ServiceAPI(object):
                     self._SCOPES
                 )
                 creds = flow.run_local_server(port=0)
+
             # Save the credentials for the next run
             with open(path.join(self._secrets_path, 'token.pickle'), 'wb') as token:
                 pickle.dump(creds, token)
