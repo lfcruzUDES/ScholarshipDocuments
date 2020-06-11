@@ -30,6 +30,7 @@ class ServiceAPI(object):
     def __init__(self, secrets_path, scopes):
         self._secrets_path = secrets_path
         self._SCOPES = scopes
+        self.token_file = f'{self.api_service}_token.pickle'
 
     def conn(self):
         """Se conecta al servicio de apis de Google
@@ -40,8 +41,8 @@ class ServiceAPI(object):
         # The file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
-        if path.exists(path.join(self._secrets_path, 'token.pickle')):
-            with open(path.join(self._secrets_path, 'token.pickle'), 'rb') as token:
+        if path.exists(path.join(self._secrets_path, self.token_file)):
+            with open(path.join(self._secrets_path, self.token_file), 'rb') as token:
                 creds = pickle.load(token)
 
         # If there are no (valid) credentials available, let the user log in.
@@ -56,7 +57,7 @@ class ServiceAPI(object):
                 creds = flow.run_local_server(port=0)
 
             # Save the credentials for the next run
-            with open(path.join(self._secrets_path, 'token.pickle'), 'wb') as token:
+            with open(path.join(self._secrets_path, self.token_file), 'wb') as token:
                 pickle.dump(creds, token)
 
         service = build(self.api_service, self.api_version, credentials=creds)

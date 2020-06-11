@@ -1,6 +1,9 @@
 """ Spreadsheets """
 
-from base_api import ServiceAPI
+try:
+    from .base_api import ServiceAPI
+except:
+    from base_api import ServiceAPI
 
 
 class GSS(ServiceAPI):
