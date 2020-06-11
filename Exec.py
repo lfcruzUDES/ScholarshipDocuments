@@ -24,7 +24,8 @@ class Executor:
         datas = self.ss.get_datas()
         for data in datas:
             student_name = data[-1].replace(' ', '-')
-            docs = [item.split('id=')[1] for item in data[2:-1]]
+            docs = [item.split('id=')[1]
+                    for item in data if 'https://' in item]
             for i, doc in enumerate(docs):
                 try:
                     self.drive.donwload_file(
