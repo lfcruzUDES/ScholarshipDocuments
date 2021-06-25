@@ -5,7 +5,7 @@ import pathlib
 # Paths
 BASE_PATH = pathlib.Path(__file__)
 
-SECRETG = BASE_PATH.parent.parent / 'secrets'
+SECRETG = BASE_PATH.parent.parent / 'secrets/udes-manager-344d77f03c21.json'
 
 SPREADSHEET_ID = '1MO_vot62pY2SFnpIfeJLYP2mxrhVC88282MmRHoWlL4'
 
