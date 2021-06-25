@@ -4,10 +4,10 @@
 from os import path, system
 
 import googleapiclient
-
-import settings
 from Google.gdrive import Drive
 from Google.gss import GSS
+
+import settings
 
 
 class Executor:
@@ -22,10 +22,12 @@ class Executor:
 
     def retrive_docs(self):
         datas = self.ss.get_datas()
+
         for data in datas:
             student_name = data[-1].replace(' ', '-')
             docs = [item.split('id=')[1]
                     for item in data if 'https://' in item]
+
             for i, doc in enumerate(docs):
                 try:
                     self.drive.donwload_file(
@@ -42,7 +44,7 @@ class Executor:
             files_pdf_remove = path.join(settings.SAVE_PATH,
                                          student_name)
             system(
-                f'convert {files_pdf_remove}* {full_pdf_name}_FULL.pdf'
+                f'convert -density 300 {files_pdf_remove}* -quality 100 {full_pdf_name}_FULL.pdf'
             )
             system(
                 f'rm {files_pdf_remove}*'

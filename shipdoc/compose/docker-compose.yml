@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  python:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - ./code:/code
+    # entrypoint: ./entrypoint.sh
