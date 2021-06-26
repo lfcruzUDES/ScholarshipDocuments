@@ -63,7 +63,7 @@ class ScholarshipDocs:
     def _download_files(self, row):
         """ Download files and return a list of its paths. """
 
-        documents_to_download = row[3:7]
+        documents_to_download = row[2:7]
         documents_downloaded = []
         full_file = settings.SAVE_PATH / row[-1].replace(' ', '_')
 
