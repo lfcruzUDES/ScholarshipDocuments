@@ -9,12 +9,9 @@ Scholarship_Documents.egg-info/requires.txt
 Scholarship_Documents.egg-info/top_level.txt
 googleapi/__init__.py
 googleapi/base_api.py
-googleapi/dummy.py
 googleapi/gdrive.py
 googleapi/gss.py
-googleapi/test_gdrive.py
-googleapi/test_gss.py
-shipdoc/Exec.py
 shipdoc/__init__.py
+shipdoc/logger.py
+shipdoc/scholarship_docs.py
 shipdoc/settings.py
-shipdoc/test_executor.py

@@ -3,7 +3,9 @@
 import io
 import pathlib
 
+from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseDownload
+from shipdoc.logger import LogHandler
 
 from googleapi.base_api import ServiceAPI
 
@@ -32,7 +34,16 @@ class Drive(ServiceAPI):
             raise Exception("File path is required")
 
         _file_path = pathlib.Path(file_path)
-        request = self.conn().files().get_media(fileId=file_id)
+
+        request = None
+
+        try:
+            request = self.conn().files().get_media(fileId=file_id)
+        except HttpError as error:
+            LogHandler.drive_logs(error)
+
+            return False
+
         fh = io.FileIO(str(_file_path), mode='wb')
         downloader = MediaIoBaseDownload(fh, request)
         done = False
@@ -41,4 +52,4 @@ class Drive(ServiceAPI):
             status, done = downloader.next_chunk()
             # print(f"{int(status.progress() * 100)}")
 
-        return downloader
+        return file_path
