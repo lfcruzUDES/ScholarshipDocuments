@@ -115,6 +115,6 @@ class ScholarshipDocs:
                 documents
             )
             self._unlink_individual_docs(documents)
-            LogHandler.execution_log(f'Created file: {full_file}')
+            LogHandler.execution_log(action=f'Created file: {full_file}')
 
         LogHandler.execution_log(action='END')
