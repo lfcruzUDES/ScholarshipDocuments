@@ -36,11 +36,13 @@ class Drive(ServiceAPI):
         _file_path = pathlib.Path(file_path)
 
         request = None
+        service = self.conn()
 
         try:
-            request = self.conn().files().get_media(fileId=file_id)
+            request = service.files().get_media(fileId=file_id)
         except HttpError as error:
             LogHandler.drive_logs(error)
+            service.close()
 
             return False
 
@@ -51,5 +53,8 @@ class Drive(ServiceAPI):
         while done is False:
             status, done = downloader.next_chunk()
             # print(f"{int(status.progress() * 100)}")
+
+        service.close()
+        fh.close()
 
         return file_path

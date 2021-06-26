@@ -12,6 +12,10 @@ from PyPDF4 import PdfFileReader, PdfFileWriter
 import shipdoc.settings as settings
 from shipdoc.logger import LogHandler
 
+#from dataclasses import dataclass
+
+
+
 
 class ScholarshipDocs:
     """ This class executes all process. """
@@ -103,7 +107,7 @@ class ScholarshipDocs:
         LogHandler.execution_log(action='START')
 
         for row in self._rows_doc:
-            student_name = row[7].replace(' ', '_')
+            student_name = row[7].strip().replace(' ', '_')
             enrollment = self._get_enrollment_by_email(row[1])
             documents = self._download_files(row)
             full_file = self._merge_documents(

@@ -29,11 +29,12 @@ class GSS(ServiceAPI):
 
         if not _range_name:
             raise Exception('Range name is required.')
-
-        sheet = self.conn().spreadsheets()
+        service = self.conn()
+        sheet = service.spreadsheets()
         result = sheet.values().get(
             spreadsheetId=_ss_id,
             range=_range_name
         ).execute()
+        service.close()
 
         return result.get('values', [])
