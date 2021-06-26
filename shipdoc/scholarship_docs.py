@@ -84,7 +84,7 @@ class ScholarshipDocs:
 
         for file_path in paths:
             if file_path:
-                pdf_reader = PdfFileReader(str(file_path))
+                pdf_reader = PdfFileReader(str(file_path), strict=False)
 
                 for page in range(pdf_reader.getNumPages()):
                     # Add each page to the writer object
