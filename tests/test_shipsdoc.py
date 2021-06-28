@@ -5,10 +5,12 @@ from shipdoc.scholarship_docs import ScholarshipDocs
 
 class TestScholarshipDocs(unittest.TestCase):
 
-    def test_process(self):
-        ship = ScholarshipDocs(
-            ss_id='1PSLlhh40ZLIz1utHmKsX1Q0mtahgTLvhbJvr09z8o-A',
-            range_name='Respuestas!A2:I5'
-        )
+    def test_process_pdf4(self):
+        ship = ScholarshipDocs()
 
         ship.process()
+
+    # def test_process_magick(self):
+    #     ship = ScholarshipDocs(mode='magick')
+
+    #     ship.process()
