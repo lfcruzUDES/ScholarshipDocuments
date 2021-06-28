@@ -17,26 +17,18 @@ def main():
     )
 
     parser.add_argument(
-        '-id',
-        '--ssid',
-        action='store',
-        help='Select spreadsheet id.'
-    )
-
-    parser.add_argument(
-        '-nr',
-        '--name_range',
-        action='store',
-        help='Set a name range.'
+        '-m',
+        '--mode_magick',
+        help=('By default program usages PyPDF4 to merge documents, if you'
+              ' select this mode program usages Imagemagick.'),
+        action='store_true',
     )
 
     args = parser.parse_args()
 
-    ss_id = args.ssid if args.ssid else None
-    name_range = args.name_range if args.name_range else None
+    ship = ScholarshipDocs()
 
-    ship = ScholarshipDocs(
-        ss_id=ss_id,
-        range_name=name_range,
-    )
-    ship.process()
+    if args.mode_magick:
+        ship.process(mode='magick')
+    else:
+        ship.process()

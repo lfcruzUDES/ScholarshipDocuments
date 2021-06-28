@@ -35,7 +35,7 @@ class ScholarshipDocs:
     # alter 'magick'
     _mode = 'pypdf'
 
-    def __init__(self, mode='pypdf' ):
+    def __init__(self, mode='pypdf'):
         self._ss_docs = GSS.create(
             settings.SECRETG,
             settings.SS_SCOPES,
@@ -179,8 +179,11 @@ class ScholarshipDocs:
 
         return cells_updated
 
-    def process(self):
+    def process(self, mode='pypdf'):
         """ Executes all process. """
+
+        if mode == 'magick':
+            self._mode = mode
 
         LogHandler.execution_log(action='START')
 
@@ -199,7 +202,7 @@ class ScholarshipDocs:
                 elif self._mode == 'magick':
                     full_file = self._merge_documents_imagemagick(file_name, documents)
                 else:
-                    raise Exception('No PDF merge method setted.')
+                    raise Exception('No PDF merge method setted or is setted wrong key word.')
 
                 # full_file_url = self._upload_file(file_name, full_file)
 
