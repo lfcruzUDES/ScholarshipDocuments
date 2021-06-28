@@ -153,8 +153,6 @@ class ScholarshipDocs:
 
         command = f'convert {" ".join(documents)} {str(full_file)}'
 
-        print(command)
-
         convert = os.system(command)
 
         return full_file
@@ -187,20 +185,24 @@ class ScholarshipDocs:
 
                 file_name = f'{enrollment}_{self._execution_id}_{student_name}_FULL.pdf'.upper()
 
-                full_file = self._merge_documents_PyPDF4(file_name, documents)
-
-                full_file = self._merge_documents_imagemagick(file_name, documents)
+                if self._mode == 'pypdf':
+                    full_file = self._merge_documents_PyPDF4(file_name, documents)
+                elif self._mode == 'magick':
+                    full_file = self._merge_documents_imagemagick(file_name, documents)
+                else:
+                    raise Exception('No PDF merge method setted.')
 
                 # full_file_url = self._upload_file(file_name, full_file)
 
                 self._unlink_individual_docs(documents)
 
-                save_in_index = self._save_in_index([
-                    enrollment,
-                    row[1],
-                    row[7].upper(),
-                    file_name,
-                ])
+                if full_file.exists():
+                    save_in_index = self._save_in_index([
+                        enrollment,
+                        row[1],
+                        row[7].upper(),
+                        file_name,
+                    ])
 
                 LogHandler.execution_log(action=f'Created file: {full_file}')
 
