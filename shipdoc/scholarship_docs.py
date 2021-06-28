@@ -8,7 +8,7 @@ import uuid
 
 from googleapi.gdrive import Drive
 from googleapi.gss import GSS
-from PyPDF4 import PdfFileReader, PdfFileWriter
+from PyPDF4 import PdfFileReader, PdfFileWriter, utils
 
 import shipdoc.settings as settings
 from shipdoc.logger import LogHandler
@@ -128,22 +128,31 @@ class ScholarshipDocs:
 
     def _merge_documents_PyPDF4(self, file_name, paths):
         """ Merge documents. """
-        pdf_writer = PdfFileWriter()
-
-        for file_path in paths:
-            if file_path:
-                pdf_reader = PdfFileReader(str(file_path), strict=False)
-
-                for page in range(pdf_reader.getNumPages()):
-                    # Add each page to the writer object
-                    pdf_writer.addPage(pdf_reader.getPage(page))
-
-        # Write out the merged PDF
         output = settings.SAVE_PATH / file_name
-        with open(output, 'wb') as out:
-            pdf_writer.write(out)
+        try:
+            pdf_writer = PdfFileWriter()
 
-        return output
+            for file_path in paths:
+                if file_path:
+                    pdf_reader = PdfFileReader(str(file_path), strict=False)
+
+                    for page in range(pdf_reader.getNumPages()):
+                        # Add each page to the writer object
+                        pdf_writer.addPage(pdf_reader.getPage(page))
+
+            # Write out the merged PDF
+            output = settings.SAVE_PATH / file_name
+            with open(output, 'wb') as out:
+                pdf_writer.write(out)
+
+            return output
+        except utils.PdfReadError as error:
+            LogHandler.execution_log(error=error)
+            LogHandler.execution_log(
+                error=f'ERROR ON: {output.name.replace(".PDF", "")}'
+            )
+
+            return output
 
     def _merge_documents_imagemagick(self, file_name, paths):
 
@@ -203,7 +212,6 @@ class ScholarshipDocs:
                         row[7].upper(),
                         file_name,
                     ])
-
-                LogHandler.execution_log(action=f'Created file: {full_file}')
+                    LogHandler.execution_log(action=f'Created file: {full_file}')
 
         LogHandler.execution_log(action='END')
