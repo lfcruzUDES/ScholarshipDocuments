@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: Scholarship-Documents
+Version: 0.2
+Summary: UNKNOWN
+Home-page: UNKNOWN
+Author: Fernando Cruz
+License: UNKNOWN
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+
+# ScholarshipDocuments
+Descarga los documentos desde Drive, y los une en un sólo pdf.
+
+
