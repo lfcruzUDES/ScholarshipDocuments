@@ -4,7 +4,7 @@ import io
 import pathlib
 
 from googleapiclient.errors import HttpError
-from googleapiclient.http import MediaIoBaseDownload
+from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 from shipdoc.logger import LogHandler
 
 from googleapi.base_api import ServiceAPI
@@ -58,3 +58,56 @@ class Drive(ServiceAPI):
         fh.close()
 
         return file_path
+
+    def upload_file(self,
+                    name,
+                    local_path,
+                    mimetype='application/pdf',
+                    folders=[],
+                    owner_email='lfcruz@udes.edu.mx'
+                    ):
+        """ Upload file. """
+
+        service = self.conn()
+
+        file_metadata = {
+            'name': name,
+            'parents': folders
+        }
+
+        media = MediaFileUpload(local_path, mimetype=mimetype)
+        file = service.files().create(
+            body=file_metadata,
+            media_body=media,
+            fields='id'
+        ).execute()
+
+        file_id = file.get('id')
+
+        # https://stackoverflow.com/questions/58080962/google-api-file-permissions-using-python
+        # https://developers.google.com/drive/api/v3/reference/permissions/create
+
+        permissions1 = {
+            'type': 'user',
+            'role': 'writer',
+            'emailAddress': owner_email,
+        }
+
+        service.permissions().create(
+            fileId=file_id,
+            body = permissions1,
+        ).execute();
+
+        permissions2 = {
+            'type': 'anyone',
+            'role': 'writer',
+        }
+
+        service.permissions().create(
+            fileId=file_id,
+            body = permissions2,
+        ).execute();
+
+        service.close()
+
+        return file_id

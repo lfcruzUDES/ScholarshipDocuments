@@ -11,12 +11,19 @@ SAVE_PATH = pathlib.Path.home() / 'shipdoc'
 
 DRIVE_SCOPES = [
     'https://www.googleapis.com/auth/drive.readonly',
-    'https://www.googleapis.com/auth/drive.file'
+    'https://www.googleapis.com/auth/drive.file',
 ]
 
-SS_SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
+SS_SCOPES = [
+    'https://www.googleapis.com/auth/spreadsheets',
+]
 
 LOG_FILE = SAVE_PATH / 'shipsdoc.log'
+
+# DRIVE
+# ------------------------------------------------------------
+
+DRIVE_DOCUMENTS_FOLDER = '1kWa4H7uG5R6aTdyJZRSM7ekxMLAhWn6U'
 
 # Documents sheet.
 # ------------------------------------------------------------
@@ -47,7 +54,23 @@ SCHOLARSHIP_SHEET_NAME = 'alumnos_datos'
 SCHOLARSHIP_RANGE_NAME = 'alumnos_datos!A2:C'
 
 SCHOLARSHIP_COLUMN_ORDER = {
-    'email': 1,
-    'date': 2,
-    'enrollment': 3,
+    'email': 0,
+    'date': 1,
+    'enrollment': 2,
+}
+
+# Index sheet.
+# ------------------------------------------------------------
+SPREADSHEET_INDEX_ID = '14zOmPR3947F82EvhuUIS-G6tbWmSgBGEUlhJC7pc2yA'
+
+INDEX_SHEET_NAME = 'Índice'
+
+INDEX_RANGE_NAME = 'index'
+
+INDEX_COLUMN_ORDER = {
+    'enrollment': 0,
+    'email': 2,
+    'name': 3,
+    'document': 5,
+    'url': 6,
 }
