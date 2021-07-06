@@ -47,17 +47,17 @@ DOCS_COLUM_ORDER = {
 
 # Scholarship sheet.
 # ------------------------------------------------------------
-SPREADSHEET_SCHOLARSHIP_ID = '1RM-N99V2gs6hmNXebi-7lt2CR2kNNP4aaUgNDw0xgWw'
-
-SCHOLARSHIP_SHEET_NAME = 'alumnos_datos'
-
-SCHOLARSHIP_RANGE_NAME = 'alumnos_datos!A2:C'
-
-SCHOLARSHIP_COLUMN_ORDER = {
-    'email': 0,
-    'date': 1,
-    'enrollment': 2,
-}
+# SPREADSHEET_SCHOLARSHIP_ID = '1RM-N99V2gs6hmNXebi-7lt2CR2kNNP4aaUgNDw0xgWw'
+#
+# SCHOLARSHIP_SHEET_NAME = 'alumnos_datos'
+#
+# SCHOLARSHIP_RANGE_NAME = 'alumnos_datos!A2:C'
+#
+# SCHOLARSHIP_COLUMN_ORDER = {
+#     'email': 0,
+#     'date': 1,
+#     'enrollment': 2,
+# }
 
 # Index sheet.
 # ------------------------------------------------------------
@@ -75,13 +75,13 @@ INDEX_COLUMN_ORDER = {
     'url': 6,
 }
 
-# Scholarship request responses.
+# Solicitud de beca.
 # ------------------------------------------------------------
-SPREADSHEET_SOLICITUD_BECA = '1RM-N99V2gs6hmNXebi-7lt2CR2kNNP4aaUgNDw0xgWw'
+SPREADSHEET_SOLICITUDES_BECA = '1RM-N99V2gs6hmNXebi-7lt2CR2kNNP4aaUgNDw0xgWw'
 
-SOLICITUD_BECA_RANGE = 'alumnos_datos'
+SOLICITUDES_BECA_RANGE = 'alumnos_datos'
 
-SOLICITUD_BECA_COLUMN_ORDER = {
+SOLICITUDES_BECA_COLUMN_ORDER = {
     'email': 0,
     'date': 1,
     'enrollment': 2,
@@ -89,7 +89,7 @@ SOLICITUD_BECA_COLUMN_ORDER = {
     'last_name': 4,
 }
 
-# Scholarship request responses.
+# Boletas.
 # ------------------------------------------------------------
 SPREADSHEET_BOLETAS_INDEX = '1IrqXZvkf0yMGUmRKG9xvcWP3NNU2so56dpBzOQZnaQ4'
 
@@ -102,11 +102,11 @@ BOLETAS_INDEX_COLUMN_ORDER = {
 
 # Scholarship Revisión y resultados de la convocatoria de becas
 # ------------------------------------------------------------
-SPREADSHEET_BECAS_REPORT_SEP = '1Crr63rRVYFElx9a3K8Tk7edDizzFN8YlEKuNl1o-irA'
+SPREADSHEET_REVISION_BECAS = '1Crr63rRVYFElx9a3K8Tk7edDizzFN8YlEKuNl1o-irA'
 
-BECAS_REPORT_SEP_RANGE = 'request'
+REVISION_BECAS_RANGE = 'request'
 
-BECAS_REPORT_SEP_COLUMN_ORDER = {
+REVISION_BECAS_COLUMN_ORDER = {
     'enrollment': 0,
     'name': 1,
     'career': 2,
@@ -118,13 +118,13 @@ BECAS_REPORT_SEP_COLUMN_ORDER = {
     'average': 10,
 }
 
-# Scholarship request responses.
+# Scholarship Reporte SEP.
 # ------------------------------------------------------------
-SPREADSHEET_BOLETAS_INDEX = '1ytym5wvW4TYJ90DgEOuV07_eoAHDadj_oe8F5iXEJPI'
+SPREADSHEET_REPORTE_SEP = '1ytym5wvW4TYJ90DgEOuV07_eoAHDadj_oe8F5iXEJPI'
 
-BOLETAS_INDEX_RANGE = 'Becas_asignadas'
+REPORTE_SEP_RANGE = 'Becas_asignadas'
 
-BOLETAS_INDEX_COLUMN_ORDER = {
+REPORTE_SEP_COLUMN_ORDER = {
     'email': 1,
     'enrollment': 2,
     'name': 3,

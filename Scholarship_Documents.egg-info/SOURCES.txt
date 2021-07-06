@@ -15,6 +15,7 @@ googleapi/base_api.py
 googleapi/gdrive.py
 googleapi/gss.py
 shipdoc/__init__.py
+shipdoc/beneficiaries.py
 shipdoc/logger.py
 shipdoc/scholarship_docs.py
 shipdoc/settings.py

@@ -27,6 +27,7 @@ class GSS(ServiceAPI):
         """ Call sheet API """
 
         service = self.conn()
+        result = None
 
         try:
             sheet = service.spreadsheets()

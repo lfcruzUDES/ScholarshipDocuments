@@ -5,3 +5,4 @@ google-auth-oauthlib
 ipython
 oauth2client
 PyPDF4
+pylint
