@@ -131,7 +131,8 @@ class Beneficiaries(ScholarshipDocs):
                         '',
                         situtation,
                         '',
-                        1
+                        1,
+                        '',
                     ]
 
                     docs_id = self._get_index(
@@ -144,6 +145,7 @@ class Beneficiaries(ScholarshipDocs):
                         docs = self._documentos_beca_data[docs_id][2:7]
                     except IndexError:
                         print('Docs IndexError', enrollment, email, name)
+                        dataToSave[len(dataToSave) - 1] += 'FALTAN_DOCUMENTOS |'
 
                     boleta_id = self._get_index(
                         enrollment,
@@ -155,5 +157,8 @@ class Beneficiaries(ScholarshipDocs):
                         boleta = self._boletas_index_data[boleta_id][1]
                     except IndexError:
                         print('Boleta IndexError', enrollment, email, name)
+                        dataToSave[len(dataToSave) - 1] += 'FALTA_BOLETA |'
+
+                    self._reporte_sep.append(dataToSave)
                 else:
                     print(enrollment, email, name)
