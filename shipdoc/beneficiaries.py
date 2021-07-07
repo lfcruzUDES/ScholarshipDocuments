@@ -114,17 +114,6 @@ class Beneficiaries(ScholarshipDocs):
                 email = (self._solicitudes_beca_data[email_id][0]
                          if email_id
                          else False)
-                docs = self._get_index(
-                    email,
-                    self._documentos_beca_data
-                )
-                boleta = self._get_index(
-                    enrollment,
-                    self._boletas_index_data
-                )
-
-                if boleta:
-                    print(boleta)
 
                 if email:
                     dataToSave = [
@@ -144,5 +133,27 @@ class Beneficiaries(ScholarshipDocs):
                         '',
                         1
                     ]
+
+                    docs_id = self._get_index(
+                        email,
+                        self._documentos_beca_index
+                    )
+                    docs = None
+
+                    try:
+                        docs = self._documentos_beca_data[docs_id][2:7]
+                    except IndexError:
+                        print('Docs IndexError', enrollment, email, name)
+
+                    boleta_id = self._get_index(
+                        enrollment,
+                        self._boletas_index_index
+                    )
+                    boleta = None
+
+                    try:
+                        boleta = self._boletas_index_data[boleta_id][1]
+                    except IndexError:
+                        print('Boleta IndexError', enrollment, email, name)
                 else:
                     print(enrollment, email, name)
