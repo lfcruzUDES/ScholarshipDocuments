@@ -45,20 +45,6 @@ DOCS_COLUM_ORDER = {
     'status': 8,
 }
 
-# Scholarship sheet.
-# ------------------------------------------------------------
-# SPREADSHEET_SCHOLARSHIP_ID = '1RM-N99V2gs6hmNXebi-7lt2CR2kNNP4aaUgNDw0xgWw'
-#
-# SCHOLARSHIP_SHEET_NAME = 'alumnos_datos'
-#
-# SCHOLARSHIP_RANGE_NAME = 'alumnos_datos!A2:C'
-#
-# SCHOLARSHIP_COLUMN_ORDER = {
-#     'email': 0,
-#     'date': 1,
-#     'enrollment': 2,
-# }
-
 # Index sheet.
 # ------------------------------------------------------------
 SPREADSHEET_INDEX_ID = '14zOmPR3947F82EvhuUIS-G6tbWmSgBGEUlhJC7pc2yA'
