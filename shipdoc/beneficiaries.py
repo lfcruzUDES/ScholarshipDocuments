@@ -1,15 +1,19 @@
 import datetime
+import re
 
 from googleapi.gdrive import Drive
 from googleapi.gss import GSS
 from PyPDF4 import PdfFileReader, PdfFileWriter, utils
 
 import shipdoc.settings as settings
+from shipdoc.logger import LogHandler
 from shipdoc.scholarship_docs import ScholarshipDocs
 
 
 class Beneficiaries(ScholarshipDocs):
     """ Handles beneficiaries. """
+
+    _data_to_save = []
 
     _revision_becas = None
     _revision_becas_data = []
@@ -105,60 +109,85 @@ class Beneficiaries(ScholarshipDocs):
             scholarship_type = beca[10]
             average = beca[11]
 
-            if (not enrollment in self._reporte_sep_index
-                and 'SEP' in scholarship_type):
-                email_id = self._get_index(
+            if enrollment in self._reporte_sep_index:
+                continue
+
+            if not 'SEP' in scholarship_type:
+                continue
+
+            email_id = self._get_index(
+                enrollment,
+                self._solicitudes_beca_index
+            )
+            email = (self._solicitudes_beca_data[email_id][0]
+                     if email_id
+                     else False)
+
+            if email:
+                dataToSave = [
+                    str(datetime.datetime.now()),
+                    email,
                     enrollment,
-                    self._solicitudes_beca_index
+                    name,
+                    career,
+                    group,
+                    average,
+                    scholarship_type,
+                    '',
+                    '',
+                    scholarship,
+                    '',
+                    situtation,
+                    '',
+                    1,
+                    '',
+                ]
+
+                docs_id = self._get_index(
+                    email,
+                    self._documentos_beca_index
                 )
-                email = (self._solicitudes_beca_data[email_id][0]
-                         if email_id
-                         else False)
+                docs = None
 
-                if email:
-                    dataToSave = [
-                        str(datetime.datetime.now()),
-                        email,
-                        enrollment,
-                        name,
-                        career,
-                        group,
-                        average,
-                        scholarship_type,
-                        '',
-                        '',
-                        scholarship,
-                        '',
-                        situtation,
-                        '',
-                        1,
-                        '',
-                    ]
+                observation_id = len(dataToSave) - 1
 
-                    docs_id = self._get_index(
-                        email,
-                        self._documentos_beca_index
+                try:
+                    docs = self._documentos_beca_data[docs_id][2:7]
+                except IndexError:
+                    print('Docs IndexError', enrollment, email, name)
+                    dataToSave[observation_id] += '| FALTAN_DOCUMENTOS'
+                    LogHandler.execution_log(
+                        error=f'FALTAN DOCUMENTOS {enrollment} {email} {name}'
                     )
-                    docs = None
 
-                    try:
-                        docs = self._documentos_beca_data[docs_id][2:7]
-                    except IndexError:
-                        print('Docs IndexError', enrollment, email, name)
-                        dataToSave[len(dataToSave) - 1] += 'FALTAN_DOCUMENTOS |'
+                    continue
 
-                    boleta_id = self._get_index(
-                        enrollment,
-                        self._boletas_index_index
+                boleta_id = self._get_index(
+                    enrollment,
+                    self._boletas_index_index
+                )
+                boleta = None
+
+                try:
+                    boleta = self._boletas_index_data[boleta_id][1]
+                except IndexError:
+                    print('Boleta IndexError', enrollment, email, name)
+                    dataToSave[observation_id] += '| FALTA_BOLETA'
+                    LogHandler.execution_log(
+                        error=f'FALTA BOLETA {enrollment} {email} {name}'
                     )
-                    boleta = None
 
-                    try:
-                        boleta = self._boletas_index_data[boleta_id][1]
-                    except IndexError:
-                        print('Boleta IndexError', enrollment, email, name)
-                        dataToSave[len(dataToSave) - 1] += 'FALTA_BOLETA |'
+                    continue
 
-                    self._reporte_sep.append(dataToSave)
-                else:
-                    print(enrollment, email, name)
+                dataToSave[observation_id] = re.sub(
+                    '^\| ',
+                    '',
+                    dataToSave[observation_id],
+                )
+
+                self._data_to_save.append(dataToSave)
+            else:
+                print(enrollment, email, name)
+
+        # Save data to Spreadsheet
+        self._reporte_sep.append(self._data_to_save)

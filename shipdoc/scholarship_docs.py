@@ -90,7 +90,7 @@ class ScholarshipDocs:
     def _get_id_file(self, http_file):
         """ Extract id from  """
 
-        sub_str = re.search('[^=][\w-]+$', http_file);
+        sub_str = re.search('[\w-]{10,}', http_file);
 
         return sub_str.group();
 
