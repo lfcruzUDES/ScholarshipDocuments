@@ -163,6 +163,7 @@ class Beneficiaries(ScholarshipDocs):
                     email,
                     self._documentos_beca_index
                 )
+                docs = self._documentos_beca_data[docs_id]
 
 
                 if not enrollment in self._boletas_index_index:
@@ -171,18 +172,15 @@ class Beneficiaries(ScholarshipDocs):
                     LogHandler.execution_log(
                         error=f'FALTA BOLETA {enrollment} {email} {name}'
                     )
+                else:
+                    boleta_id = self._get_index(
+                        enrollment,
+                        self._boletas_index_index
+                    )
+                    boleta = None
+                    boleta = self._boletas_index_data[boleta_id][1]
 
-                    continue
-
-                boleta_id = self._get_index(
-                    enrollment,
-                    self._boletas_index_index
-                )
-                boleta = None
-                boleta = self._boletas_index_data[boleta_id][1]
-
-                docs = self._documentos_beca_data[docs_id]
-                docs[3] = boleta
+                    docs[3] = boleta
                 self._rows_doc.append(docs)
                 self._data_to_save.append(dataToSave)
             else:
