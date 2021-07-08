@@ -26,11 +26,13 @@ class ScholarshipDocs:
     _ss_index = None
     _drive = None
 
-    _rows_doc = None
-    _rows_scholarship = None
+    _rows_doc = []
+    _rows_scholarship = []
     _rows_index = None
 
     _execution_id = None
+
+    _emails_processed = []
 
     # alter 'magick'
     _mode = 'pypdf'
@@ -45,8 +47,8 @@ class ScholarshipDocs:
         self._ss_student_info = GSS.create(
             settings.SECRETG,
             settings.SS_SCOPES,
-            settings.SPREADSHEET_SCHOLARSHIP_ID,
-            settings.SCHOLARSHIP_RANGE_NAME
+            settings.SPREADSHEET_SOLICITUDES_BECA,
+            settings.SOLICITUDES_BECA_RANGE
         )
         self._ss_index = GSS.create(
             settings.SECRETG,
@@ -55,11 +57,8 @@ class ScholarshipDocs:
             settings.INDEX_RANGE_NAME
         )
         self._drive = Drive(settings.SECRETG, settings.DRIVE_SCOPES)
-        date = datetime.date.today()
-        self._execution_id = f'{date.year}_{date.month}'
 
-        if not settings.SAVE_PATH.exists():
-            settings.SAVE_PATH.mkdir()
+        self._create_start_configs()
 
         self._rows_doc = self._ss_docs.get_data()
         self._rows_scholarship = self._ss_student_info.get_data()
@@ -67,6 +66,14 @@ class ScholarshipDocs:
         self._emails_processed = [row[1] for row in self._rows_index]
 
         self._mode = mode
+
+    def _create_start_configs(self):
+        date = datetime.date.today()
+        self._execution_id = f'{date.year}_{date.month}'
+
+        if not settings.SAVE_PATH.exists():
+            settings.SAVE_PATH.mkdir()
+
 
     def _get_enrollment_by_email(self, email):
         """ Get enrollment by email. """
@@ -179,7 +186,7 @@ class ScholarshipDocs:
 
         return cells_updated
 
-    def process(self, mode='pypdf'):
+    def process(self, mode='pypdf', save_in_index=True):
         """ Executes all process. """
 
         if mode == 'magick':
@@ -188,6 +195,7 @@ class ScholarshipDocs:
         LogHandler.execution_log(action='START')
 
         for row in self._rows_doc:
+
             if not self._is_processed(row[1]):
                 student_name = row[7].strip().replace(' ', '_')
 
@@ -209,12 +217,14 @@ class ScholarshipDocs:
                 self._unlink_individual_docs(documents)
 
                 if full_file.exists():
-                    save_in_index = self._save_in_index([
-                        enrollment,
-                        row[1],
-                        row[7].upper(),
-                        file_name,
-                    ])
                     LogHandler.execution_log(action=f'Created file: {full_file}')
+
+                    if save_in_index:
+                        self._save_in_index([
+                            enrollment,
+                            row[1],
+                            row[7].upper(),
+                            file_name,
+                        ])
 
         LogHandler.execution_log(action='END')

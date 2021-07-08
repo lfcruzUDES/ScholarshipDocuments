@@ -13,7 +13,9 @@ class LogHandler:
 
     @classmethod
     def execution_log(cls, error='', action=''):
-        """ LOG execution. """
+        """ LOG execution.
+        @param error {str}
+        @param action {str}"""
         txt = ''
 
         if error:

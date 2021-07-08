@@ -37,6 +37,8 @@ class Beneficiaries(ScholarshipDocs):
 
     def __init__(self):
 
+        self._create_start_configs()
+
         self._drive = Drive(settings.SECRETG, settings.DRIVE_SCOPES)
 
         self._revision_becas = GSS.create(
@@ -56,10 +58,15 @@ class Beneficiaries(ScholarshipDocs):
             settings.SOLICITUDES_BECA_RANGE
         )
         self._solicitudes_beca_data = self._solicitudes_beca.get_data()
-        self._solicitudes_beca_index = [b[2].strip() for b
-                                        in self._solicitudes_beca_data
 
-                                        if len(b) >= 3]
+        for b in self._solicitudes_beca_data:
+            try:
+                self._solicitudes_beca_index.append(b[2])
+            except IndexError:
+                print(b)
+                self._solicitudes_beca_index.append('')
+
+        self._rows_scholarship = self._solicitudes_beca_data
 
         self._documentos_beca = GSS.create(
             settings.SECRETG,
@@ -88,17 +95,24 @@ class Beneficiaries(ScholarshipDocs):
             settings.SPREADSHEET_REPORTE_SEP,
             settings.REPORTE_SEP_RANGE
         )
-        self._reporte_sep_data = self._reporte_sep.get_data()
-        self._reporte_sep_index = [d[2].strip() for d
-                                   in self._reporte_sep_data]
 
-    def _get_index(self, elemet, data_list):
+        self._reporte_sep_data = self._reporte_sep.get_data()
+
+        if len(self._reporte_sep_data) > 0:
+            self._reporte_sep_index = [d[2] for d
+                                       in self._reporte_sep_data]
+        else:
+            self._reporte_sep_data = []
+
+    def _get_index(self, element, data_list):
         try:
-            return data_list.index(elemet)
+            return data_list.index(element)
         except ValueError:
             return False
 
-    def run(self):
+    def run(self, mode='pypdf'):
+        LogHandler.execution_log(action='BENEFICIARIES START')
+
         for beca in self._revision_becas_data:
             enrollment = beca[0]
             name = beca[1]
@@ -143,21 +157,19 @@ class Beneficiaries(ScholarshipDocs):
                     '',
                 ]
 
+                observation_id = len(dataToSave) - 1
+
                 docs_id = self._get_index(
                     email,
                     self._documentos_beca_index
                 )
-                docs = None
 
-                observation_id = len(dataToSave) - 1
 
-                try:
-                    docs = self._documentos_beca_data[docs_id][2:7]
-                except IndexError:
-                    print('Docs IndexError', enrollment, email, name)
-                    dataToSave[observation_id] += '| FALTAN_DOCUMENTOS'
+                if not enrollment in self._boletas_index_index:
+                    print('Boleta IndexError', enrollment, email, name)
+                    dataToSave[observation_id] += 'FALTA_BOLETA'
                     LogHandler.execution_log(
-                        error=f'FALTAN DOCUMENTOS {enrollment} {email} {name}'
+                        error=f'FALTA BOLETA {enrollment} {email} {name}'
                     )
 
                     continue
@@ -167,27 +179,16 @@ class Beneficiaries(ScholarshipDocs):
                     self._boletas_index_index
                 )
                 boleta = None
+                boleta = self._boletas_index_data[boleta_id][1]
 
-                try:
-                    boleta = self._boletas_index_data[boleta_id][1]
-                except IndexError:
-                    print('Boleta IndexError', enrollment, email, name)
-                    dataToSave[observation_id] += '| FALTA_BOLETA'
-                    LogHandler.execution_log(
-                        error=f'FALTA BOLETA {enrollment} {email} {name}'
-                    )
-
-                    continue
-
-                dataToSave[observation_id] = re.sub(
-                    '^\| ',
-                    '',
-                    dataToSave[observation_id],
-                )
-
+                docs = self._documentos_beca_data[docs_id]
+                docs[3] = boleta
+                self._rows_doc.append(docs)
                 self._data_to_save.append(dataToSave)
             else:
                 print(enrollment, email, name)
 
         # Save data to Spreadsheet
         self._reporte_sep.append(self._data_to_save)
+        self.process(mode=mode, save_in_index=False)
+        LogHandler.execution_log(action='BENEFICIARIES END')
