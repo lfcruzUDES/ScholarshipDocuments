@@ -27,6 +27,7 @@ class GSS(ServiceAPI):
         """ Call sheet API """
 
         service = self.conn()
+        result = None
 
         try:
             sheet = service.spreadsheets()
@@ -42,9 +43,11 @@ class GSS(ServiceAPI):
         return result.get('values', [])
 
     def append(self, values):
-        """ Append values in Spreadsheet. """
+        """ Append values in Spreadsheet.
+        Values must be a list of list: any[][]"""
 
         service = self.conn()
+        updatedCells = None
 
         try:
             body = {
