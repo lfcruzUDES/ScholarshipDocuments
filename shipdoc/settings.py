@@ -89,7 +89,7 @@ BOLETAS_INDEX_COLUMN_ORDER = {
 # Scholarship Revisión y resultados de la convocatoria de becas
 # ------------------------------------------------------------
 # test
-#SPREADSHEET_REVISION_BECAS = '1JyRpkJPNASlO8BAEjQI6bxH-Oz4wIzhV_9T5QLDjq-A'
+# SPREADSHEET_REVISION_BECAS = '1JyRpkJPNASlO8BAEjQI6bxH-Oz4wIzhV_9T5QLDjq-A'
 # Este documento es creado por Vanessa.
 SPREADSHEET_REVISION_BECAS = '1Crr63rRVYFElx9a3K8Tk7edDizzFN8YlEKuNl1o-irA'
 
